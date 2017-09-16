@@ -1,2 +1,2 @@
-# EggWars
+# EggWars - REWRITE
 EggWars for Turanic
