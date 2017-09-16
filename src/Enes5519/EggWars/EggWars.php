@@ -1,32 +1,40 @@
+
+
 <?php
 
 namespace Enes5519\EggWars;
 
-use Enes5519\EggWars\Lang\LangManager;
+use pocketmine\lang\BaseLang;
 use pocketmine\plugin\PluginBase;
 
 class EggWars extends PluginBase {
 
     /** @var  EggWars */
     private static $api;
-    /** @var  LangManager */
-    public $lang = null;
+    /** @var BaseLang $baseLang */
+	private $baseLang = null;
     public $prefix = "";
 
+    /**
+	 * @api
+	 * @return BaseLang
+	 */
+	public function getLanguage() : BaseLang {
+		return $this->baseLang;
+	}
+    
+    
     public function onLoad(){
         self::$api = $this;
         @mkdir($this->getDataFolder());
         $this->saveDefaultConfig();
-        $lang = $this->getConfig()->get("lang");
-        if(!file_exists($this->langDir()."lang_".$lang.".yml")){
-            throw new \Exception("Lang file not found: ".$lang);
-        }
-        $this->prefix = $this->getConfig()->get("prefix");
-        $this->lang = new LangManager($lang);
-    }
+        
 
     public function onEnable(){
-        $this->konsol("plugin-enabled", "§a", true, "deneme");
+        
+        $lang = $this->getConfig()->get("lang", BaseLang::FALLBACK_LANGUAGE);
+
+		$this->baseLang = new BaseLang($lang, $this->getFile() . "resources/langs/");
     }
 
     public function konsol($text, $first = "", $translate = true, ...$translatearg){
